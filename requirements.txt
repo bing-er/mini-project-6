@@ -1,0 +1,13 @@
+# Core dependencies (install these first)
+numpy>=1.24.0
+pandas>=2.0.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+scikit-learn>=1.3.0
+opencv-python>=4.8.0
+jupyter>=1.0.0
+pillow>=9.0.0
+
+# TensorFlow/Keras - SEE INSTALLATION INSTRUCTIONS BELOW
+# DO NOT install from this file directly
+# keras>=2.13.0
