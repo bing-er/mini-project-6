@@ -15,6 +15,12 @@ env/
 # Data (don't commit large datasets)
 data/*
 !data/DATA_INSTRUCTIONS.txt
+!data/cat_to_name.json
+!data/README.md
+!data/sample_submission.csv
+
+notebooks/pytorch-challange-flower-dataset
+!notebooks/notebook.ipynb
 
 # Results (optional - you may want to commit these)
 # results/
