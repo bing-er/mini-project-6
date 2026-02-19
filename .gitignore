@@ -17,10 +17,10 @@ data/*
 !data/DATA_INSTRUCTIONS.txt
 !data/cat_to_name.json
 !data/README.md
-!data/sample_submission.csv
 
-notebooks/*
-!notebooks/notebook.ipynb
+# Dataset folder wherever it appears
+**/pytorch-challange-flower-dataset/
+pytorch-challange-flower-dataset/
 
 # Results (optional - you may want to commit these)
 # results/
