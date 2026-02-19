@@ -19,7 +19,7 @@ data/*
 !data/README.md
 !data/sample_submission.csv
 
-notebooks/pytorch-challange-flower-dataset
+notebooks/*
 !notebooks/notebook.ipynb
 
 # Results (optional - you may want to commit these)
