@@ -31,6 +31,42 @@ os.makedirs(FIGURES_DIR, exist_ok=True)
 os.makedirs(MODELS_DIR,  exist_ok=True)
 
 
+# ── Partner-Compatible Functions ─────────────────────────────────────────────
+
+def class_counts(dataset):
+    """
+    Count number of images per class in a tf.data.Dataset.
+    Used in notebook for class distribution analysis.
+
+    Returns:
+        dict {class_index: count}
+    """
+    from collections import Counter
+    counter = Counter()
+    for _, labels in dataset:
+        for label in labels.numpy():
+            counter[int(label)] += 1
+    return dict(sorted(counter.items()))
+
+
+def model_summary_stats(model):
+    """
+    Return a dict of trainable and total parameter counts.
+    Used in notebook for reporting model complexity.
+
+    Returns:
+        dict with keys: trainable_params, total_params
+    """
+    import numpy as np
+    import tensorflow as tf
+    trainable = int(np.sum([tf.size(w).numpy() for w in model.trainable_variables]))
+    total     = int(np.sum([tf.size(w).numpy() for w in model.variables]))
+    return {
+        "trainable_params": trainable,
+        "total_params":     total,
+    }
+
+
 # ── Dataset Loading ──────────────────────────────────────────────────────────
 
 def preprocess_image(image, label):
@@ -45,9 +81,16 @@ def load_dataset_from_directory(split="test"):
     Load a dataset split from data/<split>/ directory.
     Expects subfolders named by class index (0–101).
 
+    NOTE: The Kaggle version of this dataset has no labels in the test/
+    folder. We therefore use the valid/ split and divide it into
+    val (first 409) and test (last 409) when split='test' is requested.
+
     Returns a batched, prefetched tf.data.Dataset.
     """
-    split_dir = os.path.join(DATA_DIR, split)
+    # Map 'test' to 'valid' — Kaggle test set has no labels
+    actual_split = "valid" if split == "test" else split
+    split_dir = os.path.join(DATA_DIR, actual_split)
+
     if not os.path.exists(split_dir):
         raise FileNotFoundError(
             f"Directory not found: {split_dir}\n"
@@ -57,17 +100,28 @@ def load_dataset_from_directory(split="test"):
     ds = tf.keras.utils.image_dataset_from_directory(
         split_dir,
         image_size=(IMG_SIZE, IMG_SIZE),
-        batch_size=BATCH_SIZE,
+        batch_size=1,           # batch_size=1 to allow clean splitting
         shuffle=False,
         label_mode="int"
     )
+
+    total    = 818
+    val_size = total // 2   # 409
+
+    if split == "val":
+        ds = ds.take(val_size)
+    elif split == "test":
+        ds = ds.skip(val_size)
+    # if split == "train", ds is returned as-is (train/ has labels normally)
+
+    ds = ds.batch(BATCH_SIZE) if split in ("val", "test") else ds
+
     ds = ds.map(
         lambda x, y: (tf.cast(x, tf.float32) / 255.0, y),
         num_parallel_calls=tf.data.AUTOTUNE
     ).prefetch(tf.data.AUTOTUNE)
 
     return ds
-
 
 # ── Evaluation ───────────────────────────────────────────────────────────────
 
