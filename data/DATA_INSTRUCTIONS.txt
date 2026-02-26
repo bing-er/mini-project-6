@@ -1,0 +1,95 @@
+================================================================
+DATA SETUP INSTRUCTIONS
+Mini Project 6 — Transfer Learning (COMP 9130)
+Oxford 102 Flower Dataset
+================================================================
+
+The dataset files are NOT included in this repository (too large for GitHub).
+Follow the steps below to download and set up the data correctly.
+
+----------------------------------------------------------------
+STEP 1: DOWNLOAD THE DATASET
+----------------------------------------------------------------
+
+Option A — Kaggle Website (Manual):
+  1. Go to: https://www.kaggle.com/datasets/nunenuh/pytorch-challange-flower-dataset
+  2. Click "Download" (requires a free Kaggle account)
+  3. Save the ZIP file into this /data folder
+
+Option B — Kaggle API (Recommended):
+  1. Install the Kaggle CLI:
+       pip install kaggle
+  2. Get your API key:
+       - Go to https://www.kaggle.com/account
+       - Click "Create New API Token"
+       - This downloads kaggle.json
+       - Place kaggle.json in:
+           Windows:  C:\Users\<your-username>\.kaggle\
+           Mac/Linux: ~/.kaggle/
+  3. Run this command from the /data folder:
+       kaggle datasets download -d nunenuh/pytorch-challange-flower-dataset
+  4. Unzip the downloaded file:
+       unzip pytorch-challange-flower-dataset.zip
+
+----------------------------------------------------------------
+STEP 2: EXPECTED FOLDER STRUCTURE
+----------------------------------------------------------------
+
+After unzipping, your /data folder should look like this:
+
+  data/
+  ├── DATA_INSTRUCTIONS.txt        ← this file
+  ├── train/
+  │   ├── 1/                       ← class 1 (e.g., pink primrose)
+  │   │   ├── image_00001.jpg
+  │   │   ├── image_00002.jpg
+  │   │   └── ...
+  │   ├── 2/
+  │   └── ... (102 class folders)
+  ├── valid/
+  │   ├── 1/
+  │   └── ... (102 class folders)
+  └── test/
+      ├── 1/
+      └── ... (102 class folders)
+
+NOTE: If the unzipped structure is different (e.g., all images in one folder),
+check notebook 01_data_preparation.ipynb — the loading code handles re-splitting.
+
+----------------------------------------------------------------
+STEP 3: VERIFY THE SETUP
+----------------------------------------------------------------
+
+Run the first cell in 01_data_preparation.ipynb.
+It will check that the folders exist and print the image counts:
+
+  Expected totals (approximate):
+  - Total images:     ~8,189
+  - Classes:          102
+  - Train set:        ~5,732  (70%)
+  - Validation set:   ~1,228  (15%)
+  - Test set:         ~1,229  (15%)
+
+If you see errors about missing folders, double-check Step 2.
+
+----------------------------------------------------------------
+DATASET DETAILS
+----------------------------------------------------------------
+
+  Name:       Oxford 102 Flower Dataset
+  Source:     https://www.kaggle.com/datasets/nunenuh/pytorch-challange-flower-dataset
+  Original:   https://www.robots.ox.ac.uk/~vgg/data/flowers/102/
+  Authors:    Nilsback, M-E. and Zisserman, A. (University of Oxford, 2008)
+  Classes:    102 flower species (commonly occurring in the United Kingdom)
+  Images:     ~8,189 total | 40–258 images per class
+  License:    For academic/research use — see original dataset page for details
+
+----------------------------------------------------------------
+GITIGNORE NOTE
+----------------------------------------------------------------
+
+All image files in this folder are excluded from version control via .gitignore.
+Only this DATA_INSTRUCTIONS.txt file is tracked by Git.
+Do NOT commit the image files — the dataset is too large (~600MB) for GitHub.
+
+================================================================
